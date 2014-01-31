@@ -1,0 +1,26 @@
+\name{scalingMethods}
+\alias{scalingMethods}
+\title{scalingMethods}
+\usage{
+  scalingMethods(data,
+    methods = c("auto", "range", "pareto", "vast", "level", "power"))
+}
+\arguments{
+  \item{data}{a data matrix ([data.frame object] row:
+  molecules, col: samples or replicates)}
+
+  \item{methods}{the chosen methods.}
+}
+\value{
+  the resulting data frame (or scaled data matrix)
+}
+\description{
+  The pre-treatment methods
+}
+\examples{
+scalingMethods(iris[,1:4], "level")
+}
+\author{
+  Atsushi Fukushima
+}
+

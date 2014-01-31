@@ -1,0 +1,30 @@
+\name{cor2.test}
+\alias{cor2.test}
+\title{Correlation Test}
+\usage{
+  cor2.test(n, r,
+    method = c("pearson", "kendall", "spearman"))
+}
+\arguments{
+  \item{n}{the number of samples}
+
+  \item{r}{the correlation coefficient}
+
+  \item{method}{"pearson" and "spearman" can be used.}
+}
+\value{
+  p-value
+}
+\description{
+  Correlation Test
+}
+\examples{
+cor2.test(30, 0.6)
+}
+\author{
+  Atsushi Fukushima
+}
+\references{
+  http://aoki2.si.gunma-u.ac.jp/R/cor2.html
+}
+

@@ -1,0 +1,32 @@
+\name{get.eigen.molecule.graph}
+\alias{get.eigen.molecule.graph}
+\title{Getting graph from eigengene module list}
+\usage{
+  get.eigen.molecule.graph(eigen.list, label = "Module")
+}
+\arguments{
+  \item{eigen.list}{the resulting vector from
+  get.eigen.molecule}
+
+  \item{label}{a label of module extracted (default:
+  "Module")}
+}
+\value{
+  igraph object
+}
+\description{
+  Getting graph from eigengene module list
+}
+\examples{
+library(pcaMethods)
+library(igraph)
+data(golub, package = "multtest")
+hc.mol1 <- cluster.molecule(golub[, 1:27], "pearson", "average")
+g1 <- cutree(hc.mol1, h=0.4)
+res1 <- get.eigen.molecule(golub, g1)
+g1.eigen <- get.eigen.molecule.graph(res1)
+}
+\author{
+  Atsushi Fukushima
+}
+

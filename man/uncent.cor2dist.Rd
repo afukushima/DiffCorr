@@ -1,0 +1,34 @@
+\name{uncent.cor2dist}
+\alias{uncent.cor2dist}
+\title{Additional distance functions correlation distance (uncentered)}
+\usage{
+  uncent.cor2dist(data, i, absolute = FALSE)
+}
+\arguments{
+  \item{data}{a data matrix ([data.frame object] row:
+  metabolites, col: samples or replicates)}
+
+  \item{i}{i-th row of data}
+
+  \item{absolute}{TRUE means that absolute value of the
+  correlation coefficient is used (Default: FALSE).}
+}
+\value{
+  the resulting correlation matrix
+}
+\description{
+  Additional distance functions correlation distance
+  (uncentered)
+}
+\details{
+  These functions were originally from 'hybridHclust'
+  package. We modified the functions slightly. See also the
+  reference manual in detail.
+}
+\examples{
+uncent.cor2dist(as.matrix(t(iris[,1:4])), 1) ## NOT RUN!
+}
+\author{
+  Atsushi Fukushima
+}
+

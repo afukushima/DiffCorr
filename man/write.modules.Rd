@@ -1,0 +1,31 @@
+\name{write.modules}
+\alias{write.modules}
+\title{Writing modules into a text file}
+\usage{
+  write.modules(cutree.res, mod.list,
+    outfile = "module_list.txt")
+}
+\arguments{
+  \item{cutree.res}{the result of cutree function}
+
+  \item{mod.list}{the result of get.eigen.molecule}
+
+  \item{outfile}{file name of output}
+}
+\value{
+  a text file
+}
+\description{
+  Writing modules into a text file
+}
+\examples{
+data(golub, package = "multtest")
+hc.mol1 <- cluster.molecule(golub[, 1:27], "pearson", "average")
+g1 <- cutree(hc.mol1, h=0.4)
+res1 <- get.eigen.molecule(golub, g1)
+write.modules(g1, res1)
+}
+\author{
+  Atsushi Fukushima
+}
+

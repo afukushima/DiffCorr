@@ -1,0 +1,21 @@
+\docType{package}
+\name{DiffCorr}
+\alias{DiffCorr}
+\alias{DiffCorr-package}
+\title{Differential correlations in omics datasets}
+\description{
+  Analyze and visualize differential correlations in
+  biological networks
+}
+\details{
+  \tabular{ll}{ Package: \tab DiffCorr \cr Type: \tab
+  Package \cr Version: \tab 0.2 \cr Date: \tab 2013-08-29
+  \cr Depends: \tab igraph, pcaMethods, fdrtool \cr
+  License: \tab GPL (>=3) \cr LazyLoad: \tab yes \cr }
+
+  '
+}
+\author{
+  Atsushi Fukushima \email{a-fukush@psc.riken.jp}
+}
+

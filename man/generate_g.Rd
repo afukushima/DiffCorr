@@ -1,0 +1,47 @@
+\name{generate_g}
+\alias{generate_g}
+\title{Generating graph from data matrix}
+\usage{
+  generate_g(data, method = "pearson", cor.thr = 0.6,
+    neg.flag = 1, node.col = "red", node.size = 7,
+    edge.col = "blue", edge.width = 3)
+}
+\arguments{
+  \item{data}{data matrix or data frame}
+
+  \item{method}{c("Pearson", "Spearman", "Kendall")}
+
+  \item{cor.thr}{a threshold of correlation coefficient
+  (default: r >= 0.6)}
+
+  \item{neg.flag}{flag where uses or not negative
+  correlations}
+
+  \item{node.col}{specifies color of nodes in a graph
+  (default: red)}
+
+  \item{node.size}{specifies size of nodes in a graph
+  (default: 7)}
+
+  \item{edge.col}{specifies color of edges in a graph
+  (default: blue)}
+
+  \item{edge.width}{specifies width of edges in a graph
+  (default: 3)}
+}
+\value{
+  igraph object
+}
+\description{
+  Generating graph from data matrix
+}
+\examples{
+library(igraph)
+mat <- matrix(runif(100), nr=10)
+rownames(mat) <- as.character(1:10)
+generate_g(mat)
+}
+\author{
+  Atsushi Fukushima
+}
+

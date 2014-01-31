@@ -1,0 +1,29 @@
+\name{get.lfdr}
+\alias{get.lfdr}
+\title{Getting local false discovery rate (lfdr)}
+\usage{
+  get.lfdr(r)
+}
+\arguments{
+  \item{r}{a vector of correlation coefficient under
+  condition}
+}
+\value{
+  list of lfdr
+}
+\description{
+  Getting local false discovery rate (lfdr) using 'fdrtool'
+  package
+}
+\examples{
+library("fdrtool")
+data(pvalues)
+get.lfdr(pvalues)
+}
+\author{
+  Atsushi Fukushima
+}
+\references{
+  Strimmer, K. Bioinformatics (2008) 24, 1461-1462
+}
+
