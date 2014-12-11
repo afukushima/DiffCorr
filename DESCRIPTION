@@ -6,7 +6,7 @@ Version: 0.2
 Date: 2013-09-02
 Author: Atsushi Fukushima
 Maintainer: Atsushi Fukushima <a-fukush@psc.riken.jp>
-Depends: pcaMethods, igraph, fdrtool
+Depends: pcaMethods, igraph, fdrtool, multtest
 Description: Functions for differential correlation analyses:
 	module detection, identifying eigen molecules, testing 
 	differential correlations, and listing differentially 
