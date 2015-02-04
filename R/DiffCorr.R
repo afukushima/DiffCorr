@@ -168,7 +168,6 @@ get.lfdr <- function(r) {
 ##' @param data1 data matrix under condition 1
 ##' @param data2 data matrix under condition 2
 ##' @param method c("pearson", "spearman", "kendall")
-##' @param r a vector of correlation coefficient under condition
 ##' @param threshold a threshold of significance levels of differential correlation
 ##' @return a text file
 ##' @examples
@@ -313,10 +312,11 @@ uncent.cordist <- function(data, absolute=FALSE) {
 ##'
 ##' @title Hierarchical clustering of molecules
 ##' @param data matrix or data frame
-##' @param method c("pearson", "spearman", "kendall", "euclidean",
+##' @param methods c("pearson", "spearman", "kendall", "euclidean",
 ##' "maximum", "manhattan", "canberra", "binary", or "minkowski")
 ##' @param linkage c("average", "ward", "single", "complete", "mcquitty",
 ##' "median", "centroid")
+##' @param abs if TRUE, then 1-|COR| else 1-COR, default is FALSE
 ##' @return an object of class 'hclust'
 ##' @examples
 ##' cluster.molecule(as.matrix(t(iris[,1:4])), "pearson", "average")
@@ -349,8 +349,10 @@ cluster.molecule <- function(data, methods="pearson", linkage="average", abs=FAL
 ##' @title Get eigen molecule
 ##' @param data  a data matrix ([data.frame object] row: molecules,
 ##' col: samples or replicates)
-##' @param whichgroups
-##' @param sc See 'scalingMethods()'.
+##' @param groups a vector of group memberships as returned by cutree
+##' @param whichgroups a vector of group numbers to examine
+##' @param methods c("svd", "nipals", "rnipals", "bpca", "ppca"). See also pca() function in pcaMethods package
+##' @param n top n principal components
 ##' @return the resulting vector.
 ##' @examples
 ##' library(pcaMethods)
@@ -522,8 +524,8 @@ get.min.max <- function(d) {
 ##'
 ##' @title Plot cluster molecules
 ##' @param data data matrix or data frame
-##' @param groups
-##' @param group.no
+##' @param groups a vector of group memberships as returned by cutree
+##' @param group.no the group number to be plotted
 ##' @param title a title for the graph
 ##' @param ylim a vector indicating the upper and lower limit for the y-axis
 ##' @param order whether or not to order the columns of the data matrix
@@ -640,8 +642,8 @@ function(data, groups=NULL, group.no=NULL, title=NULL, ylim=NULL, order=NULL,
 ##' @param data a data matrix or data frame
 ##' @param groups1 a vector of row group membership as produced by cutree under condition 1
 ##' @param groups2 a vector of row group membership as produced by cutree under condition 2
-##' @param groups1.no the group number to be plotted (condition 1)
-##' @param groups2.no the group number to be plotted (condition 2)
+##' @param group1.no the group number to be plotted (condition 1)
+##' @param group2.no the group number to be plotted (condition 2)
 ##' @param g1 a vector describing the columns of the data belonging to condition 1
 ##' @param g2 a vector describing the columns of the data belonging to condition 2
 ##' @param g1.order whether or not to order the columns of the data
@@ -652,6 +654,7 @@ function(data, groups=NULL, group.no=NULL, title=NULL, ylim=NULL, order=NULL,
 ##' @param g2.order See g1.order
 ##' @param title1 A title for the left hand graph
 ##' @param title2 A title for the right hand graph
+##' @param ... other parameters to be passed to this function
 ##' @return a graph
 ##' @examples
 ##' library(pcaMethods)
