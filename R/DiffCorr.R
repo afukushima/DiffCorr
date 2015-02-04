@@ -1,7 +1,3 @@
-library(igraph)
-library(pcaMethods)
-library(fdrtool)
-
 
 ##' Analyze and visualize differential correlations in biological networks
 ##'
@@ -19,6 +15,10 @@ library(fdrtool)
 ##' @name DiffCorr
 ##' @aliases DiffCorr
 ##' @docType package
+##' @import fdrtool
+##' @import igraph
+##' @import multtest
+##' @import pcaMethods
 ##' @title Differential correlations in omics datasets
 ##' @author Atsushi Fukushima \email{a-fukush@@psc.riken.jp}
 NULL
@@ -94,12 +94,12 @@ cor2.test <- function(n, r, method = c("pearson", "kendall", "spearman")) {
   if (method == "pearson" || method == "spearman") {
     t <- abs(r) * sqrt( (n - 2) / (1 - r**2) )
     df <- n - 2
-    p <- pt(t, df, lower=FALSE) * 2
+    p <- pt(t, df, lower.tail = FALSE) * 2
     c(p)
   }
   else {
     z <- abs(r) / sqrt( (4 * n + 10) / (9 * n * (n-1) ) )
-    p <- pnorm(z, lower=FALSE) * 2
+    p <- pnorm(z, lower.tail = FALSE) * 2
     c(p)
   }
 }
@@ -312,31 +312,31 @@ uncent.cordist <- function(data, absolute=FALSE) {
 ##'
 ##' @title Hierarchical clustering of molecules
 ##' @param data matrix or data frame
-##' @param methods c("pearson", "spearman", "kendall", "euclidean",
+##' @param method c("pearson", "spearman", "kendall", "euclidean",
 ##' "maximum", "manhattan", "canberra", "binary", or "minkowski")
 ##' @param linkage c("average", "ward", "single", "complete", "mcquitty",
 ##' "median", "centroid")
-##' @param abs if TRUE, then 1-|COR| else 1-COR, default is FALSE
+##' @param absolute if TRUE, then 1-|COR| else 1-COR, default is FALSE
 ##' @return an object of class 'hclust'
 ##' @examples
 ##' cluster.molecule(as.matrix(t(iris[,1:4])), "pearson", "average")
 ##' @author Atsushi Fukushima
 ##' @export
-cluster.molecule <- function(data, methods="pearson", linkage="average", abs=FALSE) {
+cluster.molecule <- function(data, method="pearson", linkage="average", absolute=FALSE) {
   ## check input form
   if ( !is.matrix(data) & !is.data.frame(data) ) {
     stop("data must be a matrix or data frame.")
   }
 
-  if ( match(methods, c("pearson", "spearman", "kendall")) ) {
-    dist <- as.dist( cor.dist(data, method=methods, absolut=abs) )
-  } else if ( match(methods, c("euclidean","maximum","manhattan",
+  if ( match(method, c("pearson", "spearman", "kendall")) ) {
+    dist <- as.dist( cor.dist(data, methods=method, absolute=absolute) )
+  } else if ( match(method, c("euclidean","maximum","manhattan",
                                "canberra","binary","minkowski")) ) {
-    dist <- dist(data, method=methods)
-  } else if ( match(methods, c("uncentered")) ) {
+    dist <- dist(data, method=method)
+  } else if ( match(method, c("uncentered")) ) {
     dist <- as.dist( uncent.cordist(data) )
   } else {
-    stop("methods must be a similarity or distance measure as described in cor(), dist(), or uncent.cordist.")
+    stop("method must be a similarity or distance measure as described in cor(), dist(), or uncent.cordist.")
   }
   hclust(d=dist, method=linkage)
 }
@@ -547,10 +547,10 @@ get.min.max <- function(d) {
 ##' data(golub, package = "multtest")
 ##' hc.mol1 <- cluster.molecule(golub[, 1:27], "pearson", "average")
 ##' g1 <- cutree(hc.mol1, h=0.4)
-##' plot.cluster.molecules(golub[,1:27], g1, 3)
+##' plotClusterMolecules(golub[,1:27], g1, 3)
 ##' @author Atsushi Fukushima
 ##' @export
-plot.cluster.molecules <-
+plotClusterMolecules <-
 function(data, groups=NULL, group.no=NULL, title=NULL, ylim=NULL, order=NULL,
          scale.center=FALSE, scale.scale=FALSE, frame="white", col=NULL,
          bottom.mar=5, xlab="Samples", ylab="Relative abundance") {
@@ -664,12 +664,12 @@ function(data, groups=NULL, group.no=NULL, title=NULL, ylim=NULL, order=NULL,
 ##' g1 <- cutree(hc.mol1, h=0.4)
 ##' g2 <- cutree(hc.mol2, h=0.4)
 ##' ##
-##' plot.DiffCorr.group(golub, g1, g2, 21, 24, 1:27, 28:38,
+##' plotDiffCorrGroup(golub, g1, g2, 21, 24, 1:27, 28:38,
 ##'                    scale.center=TRUE, scale.scale=TRUE,
 ##'                    ylim=c(-5,5))
 ##' @author Atsushi Fukushima
 ##' @export
-plot.DiffCorr.group <-
+plotDiffCorrGroup <-
 function(data, groups1=NULL, groups2=NULL, group1.no=NULL, group2.no=NULL, g1, g2, g1.order=NULL, g2.order=NULL, title1=NULL, title2=NULL,...) {
 	if ((!is.null(groups1) & !is.null(groups2)) & (!is.null(group1.no) & (!is.null(group2.no))) ) {
 		data1 <- as.matrix(data[groups1==group1.no,])
@@ -684,10 +684,10 @@ function(data, groups1=NULL, groups2=NULL, group1.no=NULL, group2.no=NULL, g1, g
         ##
 	split.screen(c(1,2))
 	screen(1)
-	plot.cluster.molecules(d = g1.data, order = g1.order, title = title1,...)
+	plotClusterMolecules(data = g1.data, order = g1.order, title = title1,...)
 	screen(2)
-	plot.cluster.molecules(d = g2.data, order = g2.order, title = title2,...)
-	close.screen(all = TRUE)
+	plotClusterMolecules(data = g2.data, order = g2.order, title = title2,...)
+	close.screen(all.screens = TRUE)
 }
 
 

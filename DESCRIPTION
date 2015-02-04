@@ -2,14 +2,13 @@ Package: DiffCorr
 Type: Package
 Title: A package to analyze and visualize differential correlations in
         biological networks
-Version: 0.2
-Date: 2013-09-02
+Version: 0.3.0
+Date: 2015-02-04
 Author: Atsushi Fukushima
-Maintainer: Atsushi Fukushima <a-fukush@psc.riken.jp>
+Maintainer: Atsushi Fukushima <atsushi.fukushima@riken.jp>, Kozo Nishida <knishida@riken.jp>
 Depends: pcaMethods, igraph, fdrtool, multtest
 Description: Functions for differential correlation analyses:
-	module detection, identifying eigen molecules, testing 
+  module detection, identifying eigen molecules, testing 
 	differential correlations, and listing differentially 
 	correlated molecules as a text file.
 License: GPL (> 3)
-Packaged: 2013-09-03 04:47:56 UTC; a-fukush
