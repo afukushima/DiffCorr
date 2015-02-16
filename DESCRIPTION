@@ -5,7 +5,7 @@ Title: A package to analyze and visualize differential correlations in
 Version: 0.3.0
 Date: 2015-02-04
 Author: Atsushi Fukushima
-Maintainer: Atsushi Fukushima <atsushi.fukushima@riken.jp>, Kozo Nishida <knishida@riken.jp>
+Maintainer: Atsushi Fukushima <atsushi.fukushima@riken.jp>
 Depends: pcaMethods, igraph, fdrtool, multtest
 Description: Functions for differential correlation analyses:
   module detection, identifying eigen molecules, testing 
