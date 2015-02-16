@@ -1,7 +1,7 @@
 Package: DiffCorr
 Type: Package
-Title: A package to analyze and visualize differential correlations in
-        biological networks
+Title: A Package to Analyze and Visualize Differential Correlations in
+        Biological networks
 Version: 0.3.0
 Date: 2015-02-04
 Author: Atsushi Fukushima
