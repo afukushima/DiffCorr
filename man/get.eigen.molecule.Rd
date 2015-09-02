@@ -28,9 +28,9 @@ Get eigen molecule
 \examples{
 library(pcaMethods)
 data(golub, package = "multtest")
-hc.mol1 <- cluster.molecule(golub[, 1:27], "pearson", "average")
+hc.mol1 <- cluster.molecule(golub[1:100, 1:27], "pearson", "average")
 g1 <- cutree(hc.mol1, h=0.6)
-res1 <- get.eigen.molecule(golub, g1)
+res1 <- get.eigen.molecule(golub[1:100,], g1)
 }
 \author{
 Atsushi Fukushima

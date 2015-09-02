@@ -5,7 +5,7 @@
 \title{Export differential correlations between two conditions}
 \usage{
 comp.2.cc.fdr(output.file = "res.txt", data1, data2, method = "pearson",
-  threshold = 0.05)
+  p.adjust.methods = "local", threshold = 0.05)
 }
 \arguments{
 \item{output.file}{can specify file name of the results exported}
@@ -16,6 +16,8 @@ comp.2.cc.fdr(output.file = "res.txt", data1, data2, method = "pearson",
 
 \item{method}{c("pearson", "spearman", "kendall")}
 
+\item{p.adjust.methods}{c("local", holm", "hochberg", "hommel", "bonferroni", "BH", "BY", "fdr", "none")}
+
 \item{threshold}{a threshold of significance levels of differential correlation}
 }
 \value{
@@ -25,14 +27,16 @@ a text file
 Export differential correlations of comparison of two correlation matrices
 }
 \examples{
-library(fdrtool)
-data(golub, package = "multtest")
-comp.2.cc.fdr(output.file="res.txt", golub[,1:27], golub[,28:38])
+data(AraMetRoots)
+AraMetRoots[AraMetRoots==0] <- NA
+AraMetRootsImp <- completeObs(pca(log2(AraMetRoots), nPcs=3, method="ppca"))
+comp.2.cc.fdr(output.file="res.txt", AraMetRootsImp[,1:17], method="spearman",
+              AraMetRootsImp[,18:37], threshold=0.05)
 }
 \author{
 Atsushi Fukushima
 }
 \references{
-Strimmer, K. Bioinformatics (2008) 24, 1461-1462
+Fukushima, A. Gene (2013) 518, 209-214
 }
 

@@ -1,11 +1,10 @@
-
 ##' Analyze and visualize differential correlations in biological networks
 ##'
 ##' \tabular{ll}{
 ##' Package: \tab DiffCorr \cr
 ##' Type: \tab Package \cr
-##' Version: \tab 0.2 \cr
-##' Date: \tab 2013-08-29 \cr
+##' Version: \tab 0.4.1 \cr
+##' Date: \tab 2015-03-31 \cr
 ##' Depends: \tab igraph, pcaMethods, fdrtool \cr
 ##' License: \tab GPL (>=3) \cr
 ##' LazyLoad: \tab yes \cr
@@ -20,7 +19,7 @@
 ##' @import multtest
 ##' @import pcaMethods
 ##' @title Differential correlations in omics datasets
-##' @author Atsushi Fukushima \email{a-fukush@@psc.riken.jp}
+##' @author Atsushi Fukushima, Kozo Nishida
 NULL
 
 
@@ -168,59 +167,73 @@ get.lfdr <- function(r) {
 ##' @param data1 data matrix under condition 1
 ##' @param data2 data matrix under condition 2
 ##' @param method c("pearson", "spearman", "kendall")
+##' @param p.adjust.methods c("local", holm", "hochberg", "hommel", "bonferroni", "BH", "BY", "fdr", "none")
 ##' @param threshold a threshold of significance levels of differential correlation
 ##' @return a text file
 ##' @examples
-##' library(fdrtool)
-##' data(golub, package = "multtest")
-##' comp.2.cc.fdr(output.file="res.txt", golub[,1:27], golub[,28:38])
+##' data(AraMetRoots)
+##' AraMetRoots[AraMetRoots==0] <- NA
+##' AraMetRootsImp <- completeObs(pca(log2(AraMetRoots), nPcs=3, method="ppca"))
+##' comp.2.cc.fdr(output.file="res.txt", AraMetRootsImp[,1:17], method="spearman", 
+##'               AraMetRootsImp[,18:37], threshold=0.05)
 ##' @references
-##' Strimmer, K. Bioinformatics (2008) 24, 1461-1462
+##' Fukushima, A. Gene (2013) 518, 209-214
 ##' @author Atsushi Fukushima
 ##' @export
-comp.2.cc.fdr <- function(output.file="res.txt", data1, data2,
-                          method="pearson", threshold=0.05) {
-#    stopifnot(  nrow(cc1) == nrow(cc2)  )   # The elements of two 'cc' must be same.
-  cc1 <- cor(t(data1), method=method)
-  cc2 <- cor(t(data2), method=method)
-  ## tri corr
-  ccc1 <- as.vector( cc1[lower.tri(cc1)] )
-  ccc2 <- as.vector( cc2[lower.tri(cc2)] )
+comp.2.cc.fdr <- function (output.file = "res.txt", data1, data2, method = "pearson", 
+                           p.adjust.methods = "local", threshold = 0.05) 
+{
+  cc1 <- cor(t(data1), method = method)
+  cc2 <- cor(t(data2), method = method)
+  ccc1 <- as.vector(cc1[lower.tri(cc1)])
+  ccc2 <- as.vector(cc2[lower.tri(cc2)])
   n1 <- ncol(data1)
   n2 <- ncol(data2)
   n <- nrow(data1)
-  N <- n * (n - 1) / 2
+  N <- n * (n - 1)/2
   p1 <- rep(1, N)
   p2 <- rep(1, N)
   pdiff <- rep(1, N)
-  diff <- rep(1, N)    
-  write("molecule X\tmolecule Y\tr1\tp1\tr2\tp2\tp (difference)\t(r1-r2)\tlfdr (in cond. 1)\tlfdr (in cond. 2)\tlfdr (difference)", file=output.file, append=FALSE)
+  diff <- rep(1, N)
   mol.names <- rownames(cc1)
-  ##
   p1 <- cor2.test(n1, ccc1)
   p2 <- cor2.test(n2, ccc2)
   pdiff <- compcorr(n1, ccc1, n2, ccc2)$pval
   diff <- ccc1 - ccc2
-  ###
-  pdiff[(is.na(pdiff))==TRUE] <- 1
-  ### calculating lfdr
-  p1.lfdr <- get.lfdr(p1)$lfdr
-  p2.lfdr <- get.lfdr(p2)$lfdr
-  pdiff.lfdr <- get.lfdr(pdiff)$lfdr
-  ## output
-  k <- 1
-  for (i in 1:(n-1)) {
-    for (j in (i+1):n) {
-      if (pdiff.lfdr[k] < as.numeric(threshold)) {
-        str2 <- paste(mol.names[i], mol.names[j], round(cc1[i, j], 6), p1[k],
-                      round(cc2[i, j], 6), p2[k], pdiff[k], diff[k], p1.lfdr[k],
-                      p2.lfdr[k], pdiff.lfdr[k], sep="\t")
-        write(str2, file=output.file, append=TRUE)
-      }
-      k <- k+1
-    }
+  pdiff[(is.na(pdiff)) == TRUE] <- 1
+  if (p.adjust.methods == "local") {
+    p1.lfdr <- get.lfdr(p1)$lfdr
+    p2.lfdr <- get.lfdr(p2)$lfdr
+    pdiff.lfdr <- get.lfdr(pdiff)$lfdr
+  } else if (p.adjust.methods == "BH" | p.adjust.methods == "bh") {
+    p1.lfdr <- p.adjust(p1, method=p.adjust.methods)
+    p2.lfdr <- p.adjust(p2, method=p.adjust.methods)
+    pdiff.lfdr <- p.adjust(pdiff, method=p.adjust.methods)
+  } else {
+    p1.lfdr <- rep("not adjusted", N)
+    p2.lfdr <- rep("not adjusted", N)
+    pdiff.lfdr <- rep("not adjusted", N)
   }
+  
+  ## generates combination
+  myindex <- which((lower.tri(cc1))==TRUE, arr.ind=TRUE)
+  mol.names1 <- mol.names[myindex[,2]]
+  mol.names2 <- mol.names[myindex[,1]]
+  
+  ## threshold
+  fin.ind <- pdiff.lfdr<threshold
+  ## concat
+  res <- cbind(mol.names1[fin.ind], mol.names2[fin.ind], ccc1[fin.ind], p1[fin.ind],
+               ccc2[fin.ind], p2[fin.ind],
+               pdiff[fin.ind], diff[fin.ind], p1.lfdr[fin.ind], p2.lfdr[fin.ind], pdiff.lfdr[fin.ind])
+  head <- c("molecule X", "molecule Y", "r1", "p1",
+            "r2", "p2", "p (difference)", "(r1-r2)",
+            "lfdr (in cond. 1)", "lfdr (in cond. 2)",
+            "lfdr (difference)")
+  res <- rbind(head, res)
+  write.table(res, file = output.file, row.names=FALSE, col.names=FALSE, sep="\t", quote=FALSE)
 }
+
 
 
 
@@ -357,9 +370,9 @@ cluster.molecule <- function(data, method="pearson", linkage="average", absolute
 ##' @examples
 ##' library(pcaMethods)
 ##' data(golub, package = "multtest")
-##' hc.mol1 <- cluster.molecule(golub[, 1:27], "pearson", "average")
+##' hc.mol1 <- cluster.molecule(golub[1:100, 1:27], "pearson", "average")
 ##' g1 <- cutree(hc.mol1, h=0.6)
-##' res1 <- get.eigen.molecule(golub, g1)
+##' res1 <- get.eigen.molecule(golub[1:100,], g1)
 ##' @author Atsushi Fukushima
 ##' @export
 get.eigen.molecule <- function(data, groups, whichgroups=NULL, methods="svd", n=10){
