@@ -19,6 +19,10 @@ library(devtools)
 install_github("afukushima/DiffCorr")
 ```
 
+Documents
+------------
+For short tutorial, please see [here](https://sourceforge.net/projects/diffcorr/files/AdditionalFile3.txt/download).
+
 Updates
 ------------
 #### version 0.4.1 (Sep 4, 2015)
