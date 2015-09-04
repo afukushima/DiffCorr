@@ -18,3 +18,12 @@ biocLite("pcaMethods")
 library(devtools)
 install_github("afukushima/DiffCorr")
 ```
+
+Updates
+------------
+#### version 0.4.1 (Sep 4, 2015)
+* A metabolite data set from Arabidopsis leaves and roots by GC-TOF/MS
+
+License
+------------
+The DiffCorr package is free software; a copy of the GNU General Public License, version 3, is available at [http://www.r-project.org/Licenses/GPL-3](http://www.r-project.org/Licenses/GPL-3)
