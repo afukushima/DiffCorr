@@ -12,8 +12,10 @@ Installation
 ------------
 ```R
 install.packages("devtools")
+install.packages(c("igraph", "fdrtool"))
+
 source("http://bioconductor.org/biocLite.R")
-biocLite("pcaMethods")
+biocLite(c("pcaMethods", "multtest))
 
 library(devtools)
 install_github("afukushima/DiffCorr")
