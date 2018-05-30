@@ -4,7 +4,12 @@ Title: Analyzing and Visualizing Differential Correlation Networks in
         Biological Data
 Version: 0.4.1
 Date: 2015-03-31
-Author: Atsushi Fukushima, Kozo Nishida
+Authors@R: c(person("Atsushi", "Fukushima", role = c("aut", "cre"),
+                    email = "atsushi.fukushima@riken.jp"),
+              person("Kozo", "Nishida", role = "aut",
+                    email = "knishida@riken.jp"))
+Author: Atsuhshi Fukushima [aut, cre],
+  Kozo Nishida [aut]
 Maintainer: Atsushi Fukushima <atsushi.fukushima@riken.jp>
 Depends: pcaMethods, igraph, fdrtool, multtest
 Description: A method for identifying pattern changes between 2 experimental
