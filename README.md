@@ -26,6 +26,8 @@ Documents
 ------------
 For short tutorial, please see [here](https://sourceforge.net/projects/diffcorr/files/AdditionalFile3.txt/download).
 
+See also support page of the DiffCorr book [here](http://afukushima.github.io/diffcorrbook/).
+
 Updates
 ------------
 #### version 0.4.1 (Sep 4, 2015)
