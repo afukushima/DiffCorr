@@ -14,8 +14,9 @@ Installation
 install.packages("devtools")
 install.packages(c("igraph", "fdrtool"))
 
-source("http://bioconductor.org/biocLite.R")
-biocLite(c("pcaMethods", "multtest))
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+BiocManager::install(c("pcaMethods", "multtest"))
 
 library(devtools)
 install_github("afukushima/DiffCorr")
