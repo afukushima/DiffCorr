@@ -25,3 +25,4 @@ Packaged: 2015-03-31 08:49:09 UTC; fuku
 NeedsCompilation: no
 Repository: CRAN
 Date/Publication: 2015-04-02 00:07:09
+RoxygenNote: 7.1.2
