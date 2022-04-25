@@ -25,17 +25,18 @@ NULL
 
 
 ##' The pre-treatment methods
-##' 
+##'
 ##' @title scalingMethods
 ##' @param data a data matrix ([data.frame object] row: molecules,
 ##' col: samples or replicates)
 ##' @param methods the chosen methods.
 ##' @return the resulting data frame (or scaled data matrix)
+##' @importFrom stats sd
 ##' @examples
 ##' scalingMethods(iris[,1:4], "level")
 ##' @author Atsushi Fukushima
 ##' @export
-scalingMethods <- function(data, 
+scalingMethods <- function(data,
             methods = c("auto", "range", "pareto", "vast", "level", "power")) {
   methods <- match.arg(methods)
   if(ncol(data) > 1) {
@@ -83,6 +84,8 @@ scalingMethods <- function(data,
 ##' @param r the correlation coefficient
 ##' @param method "pearson" and "spearman" can be used.
 ##' @return p-value
+##' @importFrom stats pt
+##' @importFrom stats pnorm
 ##' @examples
 ##' cor2.test(30, 0.6)
 ##' @references http://aoki2.si.gunma-u.ac.jp/R/cor2.html
@@ -106,7 +109,7 @@ cor2.test <- function(n, r, method = c("pearson", "kendall", "spearman")) {
 
 
 ##' Compare two correlation coefficients using Fisher's Z-transformation
-##' 
+##'
 ##' @title Compare two correlation coefficients
 ##' @param n1 sample size under condition 1
 ##' @param r1 correlation coefficient under condition 1
@@ -143,7 +146,7 @@ compcorr <- function(n1, r1, n2, r2){
 }
 
 ##' Getting local false discovery rate (lfdr) using 'fdrtool' package
-##' 
+##'
 ##' @title Getting local false discovery rate (lfdr)
 ##' @param r a vector of correlation coefficient under condition
 ##' @return list of lfdr
@@ -161,7 +164,7 @@ get.lfdr <- function(r) {
 }
 
 ##' Export differential correlations of comparison of two correlation matrices
-##' 
+##'
 ##' @title Export differential correlations between two conditions
 ##' @param output.file can specify file name of the results exported
 ##' @param data1 data matrix under condition 1
@@ -170,18 +173,23 @@ get.lfdr <- function(r) {
 ##' @param p.adjust.methods c("local", holm", "hochberg", "hommel", "bonferroni", "BH", "BY", "fdr", "none")
 ##' @param threshold a threshold of significance levels of differential correlation
 ##' @return a text file
+##' @importFrom stats cor
+##' @importFrom stats p.adjust
+##' @importFrom utils write.table
 ##' @examples
+##' \dontrun{
 ##' data(AraMetRoots)
 ##' AraMetRoots[AraMetRoots==0] <- NA
 ##' AraMetRootsImp <- completeObs(pca(log2(AraMetRoots), nPcs=3, method="ppca"))
-##' comp.2.cc.fdr(output.file="res.txt", AraMetRootsImp[,1:17], method="spearman", 
+##' comp.2.cc.fdr(output.file="res.txt", AraMetRootsImp[,1:17], method="spearman",
 ##'               AraMetRootsImp[,18:37], threshold=0.05)
+##' }
 ##' @references
 ##' Fukushima, A. Gene (2013) 518, 209-214
 ##' @author Atsushi Fukushima
 ##' @export
-comp.2.cc.fdr <- function (output.file = "res.txt", data1, data2, method = "pearson", 
-                           p.adjust.methods = "local", threshold = 0.05) 
+comp.2.cc.fdr <- function (output.file = "res.txt", data1, data2, method = "pearson",
+                           p.adjust.methods = "local", threshold = 0.05)
 {
   cc1 <- cor(t(data1), method = method)
   cc2 <- cor(t(data2), method = method)
@@ -214,12 +222,12 @@ comp.2.cc.fdr <- function (output.file = "res.txt", data1, data2, method = "pear
     p2.lfdr <- rep("not adjusted", N)
     pdiff.lfdr <- rep("not adjusted", N)
   }
-  
+
   ## generates combination
   myindex <- which((lower.tri(cc1))==TRUE, arr.ind=TRUE)
   mol.names1 <- mol.names[myindex[,2]]
   mol.names2 <- mol.names[myindex[,1]]
-  
+
   ## threshold
   fin.ind <- pdiff.lfdr<threshold
   ## concat
@@ -249,6 +257,7 @@ comp.2.cc.fdr <- function (output.file = "res.txt", data1, data2, method = "pear
 ##' @param methods a character string indicating which correlation coefficient is to be calculated. One of "pearson" (default), "spearman", or "kendall" can be abbreviated.
 ##' @param absolute TRUE means that absolute value of the correlation coefficient is used (Default: FALSE).
 ##' @return the resulting correlation matrix
+##' @importFrom stats cor
 ##' @examples
 ##' cor.dist(as.matrix(t(iris[,1:4])))
 ##' @author Atsushi Fukushima
@@ -268,7 +277,7 @@ cor.dist <- function(data, methods="pearson", absolute=FALSE) {
 ##' These functions were originally from 'hybridHclust' package.
 ##' We modified the functions slightly. See also the reference manual in detail.
 ##'
-##' @title Additional distance functions correlation distance (uncentered) 
+##' @title Additional distance functions correlation distance (uncentered)
 ##' @param data  a data matrix ([data.frame object] row: metabolites,
 ##' col: samples or replicates)
 ##' @param i i-th row of data
@@ -331,6 +340,8 @@ uncent.cordist <- function(data, absolute=FALSE) {
 ##' "median", "centroid")
 ##' @param absolute if TRUE, then 1-|COR| else 1-COR, default is FALSE
 ##' @return an object of class 'hclust'
+##' @importFrom stats as.dist
+##' @importFrom stats hclust
 ##' @examples
 ##' cluster.molecule(as.matrix(t(iris[,1:4])), "pearson", "average")
 ##' @author Atsushi Fukushima
@@ -367,6 +378,7 @@ cluster.molecule <- function(data, method="pearson", linkage="average", absolute
 ##' @param methods c("svd", "nipals", "rnipals", "bpca", "ppca"). See also pca() function in pcaMethods package
 ##' @param n top n principal components
 ##' @return the resulting vector.
+##' @importFrom stats cor
 ##' @examples
 ##' library(pcaMethods)
 ##' data(golub, package = "multtest")
@@ -401,10 +413,10 @@ get.eigen.molecule <- function(data, groups, whichgroups=NULL, methods="svd", n=
     ## PCA
     mydata <- submat
     pc <- pca(t(mydata), method=methods, nPcs=n)
-    eigen.molecules[[no.res]] <- as.vector(loadings(pc)[1:n,1])    
+    eigen.molecules[[no.res]] <- as.vector(loadings(pc)[1:n,1])
     group[no.res] <- i
     N[no.res] <- nrow(data[groups==i,])
-    mean.corr[no.res] <- mean(c1[lower.tri(c1)]) 
+    mean.corr[no.res] <- mean(c1[lower.tri(c1)])
     no.res <- no.res + 1
   }
   df <- list("group"=group, "N"=N, "mean.corr"=mean.corr, "eigen.molecules"=eigen.molecules)
@@ -424,6 +436,7 @@ get.eigen.molecule <- function(data, groups, whichgroups=NULL, methods="svd", n=
 ##' @param edge.col specifies color of edges in a graph (default: blue)
 ##' @param edge.width specifies width of edges in a graph (default: 3)
 ##' @return igraph object
+##' @importFrom stats cor
 ##' @examples
 ##' library(igraph)
 ##' mat <- matrix(runif(100), nr=10)
@@ -485,12 +498,15 @@ get.eigen.molecule.graph <- function(eigen.list, label="Module") {
 ##' @param mod.list the result of get.eigen.molecule
 ##' @param outfile file name of output
 ##' @return a text file
+##' @importFrom utils write.table
 ##' @examples
+##' \dontrun{
 ##' data(golub, package = "multtest")
 ##' hc.mol1 <- cluster.molecule(golub[, 1:27], "pearson", "average")
 ##' g1 <- cutree(hc.mol1, h=0.4)
 ##' res1 <- get.eigen.molecule(golub, g1)
 ##' write.modules(g1, res1)
+##' }
 ##' @author Atsushi Fukushima
 ##' @export
 write.modules <- function(cutree.res,  mod.list, outfile="module_list.txt") {
@@ -520,14 +536,14 @@ get.min.max <- function(d) {
   if (maxloc%%1 == 0) {
     max.row <- nrow(d)
   }
-  
+
   minloc  <- which.min(as.vector(as.matrix(d)))/nrow(d)
   min.col <- ceiling(minloc)
   min.row <- round((minloc-trunc(minloc)) * nrow(d))
   if (minloc%%1 == 0) {
     min.row <- nrow(d)
   }
-  
+
   list(max = d[max.row,max.col], min = d[min.row,min.col], max.i = max.row)
 }
 
@@ -545,16 +561,22 @@ get.min.max <- function(d) {
 ##' @param scale.center unless NULL, each row is scaled using scale
 ##' @param scale.scale unless NULL, each row is scaled using scale.
 ##' @param frame the color of the frame that is drawn as the background of the plot
-##' @param col If NULL, all genes will be drawn in the default color (blue).  
-##'  If the text "random" is given, then a set of colors will be generated by 
+##' @param col If NULL, all genes will be drawn in the default color (blue).
+##'  If the text "random" is given, then a set of colors will be generated by
 ##' @param bottom.mar The size of the bottom margin of the plots as sent in par(mar=c(...))
 ##' @param xlab a lalel of x axis (defalt: "Samples")
 ##' @param ylab a lalel of y axis (defalt: "Relative abundance")
 ##' @return a graph
 ##' @references
 ##' this function was originally from Watson M (2005) BMC Bioinformatics 7:509
+##' @importFrom grDevices rainbow
+##' @importFrom graphics par
+##' @importFrom grDevices xy.coords
+##' @importFrom graphics axis
+##' @importFrom graphics rect
+##' @importFrom graphics lines
 ##' @examples
-##' 
+##'
 ##'
 ##' library(pcaMethods)
 ##' data(golub, package = "multtest")
@@ -609,7 +631,7 @@ function(data, groups=NULL, group.no=NULL, title=NULL, ylim=NULL, order=NULL,
 	if (is.null(ylim)) {
 		ylim <- range(mm$min,mm$max)
 	}
-	
+
 	if(is.null(col)) {
 		# if col is null, we want all blue
 		col <- rep("black", nrow(data))
@@ -641,7 +663,7 @@ function(data, groups=NULL, group.no=NULL, title=NULL, ylim=NULL, order=NULL,
 	if(!is.null(red)) {
 		lines(xy.coords(1:ncol(data),red), col="red", lty="dashed")
 	}
-	
+
 	if(!is.null(title)) {
 	   title(title)
 	}
@@ -663,12 +685,15 @@ function(data, groups=NULL, group.no=NULL, title=NULL, ylim=NULL, order=NULL,
 ##' matrix for condition 1.  If "average", then the columns are ordered
 ##' by the average expression value.  If the name of a gene (row),
 ##' then the columns are orderd according to the expression levels of
-##' that gene.  If NULL, columns remain in their original order.  
+##' that gene.  If NULL, columns remain in their original order.
 ##' @param g2.order See g1.order
 ##' @param title1 A title for the left hand graph
 ##' @param title2 A title for the right hand graph
 ##' @param ... other parameters to be passed to this function
 ##' @return a graph
+##' @importFrom graphics split.screen
+##' @importFrom graphics screen
+##' @importFrom graphics close.screen
 ##' @examples
 ##' library(pcaMethods)
 ##' data(golub, package = "multtest")
@@ -686,7 +711,7 @@ plotDiffCorrGroup <-
 function(data, groups1=NULL, groups2=NULL, group1.no=NULL, group2.no=NULL, g1, g2, g1.order=NULL, g2.order=NULL, title1=NULL, title2=NULL,...) {
 	if ((!is.null(groups1) & !is.null(groups2)) & (!is.null(group1.no) & (!is.null(group2.no))) ) {
 		data1 <- as.matrix(data[groups1==group1.no,])
-		data2 <- as.matrix(data[groups2==group2.no,])                
+		data2 <- as.matrix(data[groups2==group2.no,])
 	}
 	else {
 		data <- as.matrix(data)
