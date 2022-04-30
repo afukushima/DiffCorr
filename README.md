@@ -35,4 +35,4 @@ Updates
 
 License
 ------------
-The DiffCorr package is free software; a copy of the GNU General Public License, version 3, is available at [http://www.r-project.org/Licenses/GPL-3](http://www.r-project.org/Licenses/GPL-3)
+The DiffCorr package is free software; a copy of the GNU General Public License, version 3, is available at [https://www.R-project.org/Licenses/GPL-3](https://www.R-project.org/Licenses/GPL-3)
