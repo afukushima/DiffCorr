@@ -1,14 +1,5 @@
 ##' Analyze and visualize differential correlations in biological networks
 ##'
-##' \tabular{ll}{
-##' Package: \tab DiffCorr \cr
-##' Type: \tab Package \cr
-##' Version: \tab 0.4.1 \cr
-##' Date: \tab 2015-03-31 \cr
-##' Depends: \tab igraph, pcaMethods, fdrtool \cr
-##' License: \tab GPL (>=3) \cr
-##' LazyLoad: \tab yes \cr
-##' }
 ##'
 ##''
 ##' @name DiffCorr
