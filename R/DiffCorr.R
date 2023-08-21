@@ -1,20 +1,3 @@
-##' Analyze and visualize differential correlations in biological networks
-##'
-##'
-##''
-##' @name DiffCorr
-##' @aliases DiffCorr
-##' @docType package
-##' @import fdrtool
-##' @import igraph
-##' @import multtest
-##' @import pcaMethods
-##' @title Differential correlations in omics datasets
-##' @author Atsushi Fukushima, Kozo Nishida
-NULL
-
-
-
 ##' The pre-treatment methods
 ##'
 ##' @title scalingMethods
