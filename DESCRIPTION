@@ -3,7 +3,7 @@ Type: Package
 Title: Analyzing and Visualizing Differential Correlation Networks in
         Biological Data
 Version: 0.4.3
-Date: 2022-04-29
+Date: 2023-08-20
 Authors@R: c(person("Atsushi", "Fukushima", role = c("aut", "cre"),
                     email = "afukushima@gmail.com"),
               person("Kozo", "Nishida", role = "aut",
