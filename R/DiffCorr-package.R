@@ -7,5 +7,9 @@
 #' @aliases DiffCorr-package
 #' @name DiffCorr-package
 #' @docType package
+#' @import fdrtool
+#' @import igraph
+#' @import multtest
+#' @import pcaMethods
 #' @keywords internal
 "_PACKAGE"
