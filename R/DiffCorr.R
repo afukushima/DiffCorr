@@ -424,10 +424,10 @@ generate_g <- function(data, method="pearson", cor.thr=0.6, neg.flag=1,
   data.cor <- cor(t(data), method=method)
   # association network
   if (neg.flag==1) {
-    g <- simplify( graph.adjacency( (data.cor >= cor.thr |
+    g <- simplify( graph_from_adjacency_matrix( (data.cor >= cor.thr |
                                      data.cor < -cor.thr), mode="undirected") )
   } else {
-    g <- simplify( graph.adjacency( (data.cor >= cor.thr), mode="undirected") )
+    g <- simplify( graph_from_adjacency_matrix( (data.cor >= cor.thr), mode="undirected") )
   }
   V(g)$size <- node.size
   V(g)$name <- row.names(data)
