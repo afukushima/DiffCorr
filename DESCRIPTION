@@ -23,9 +23,11 @@ Packaged: 2022-04-29 06:24:09 UTC; kozo
 NeedsCompilation: no
 Repository: CRAN
 Date/Publication: 2015-04-02 00:07:09
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.2
 Suggests: 
     knitr,
     rmarkdown,
-    prettydoc
+    prettydoc,
+    testthat (>= 3.0.0)
 VignetteBuilder: knitr
+Config/testthat/edition: 3
