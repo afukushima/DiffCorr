@@ -10,7 +10,8 @@ comp.2.cc.fdr(
   data2,
   method = "pearson",
   p.adjust.methods = "local",
-  threshold = 0.05
+  threshold = 0.05,
+  save = FALSE
 )
 }
 \arguments{
@@ -25,9 +26,11 @@ comp.2.cc.fdr(
 \item{p.adjust.methods}{c("local", holm", "hochberg", "hommel", "bonferroni", "BH", "BY", "fdr", "none")}
 
 \item{threshold}{a threshold of significance levels of differential correlation}
+
+\item{save}{exports the results as a text if TRUE (default: FALSE)}
 }
 \value{
-a text file
+data.frame
 }
 \description{
 Export differential correlations of comparison of two correlation matrices

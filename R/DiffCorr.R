@@ -146,7 +146,8 @@ get.lfdr <- function(r) {
 ##' @param method c("pearson", "spearman", "kendall")
 ##' @param p.adjust.methods c("local", holm", "hochberg", "hommel", "bonferroni", "BH", "BY", "fdr", "none")
 ##' @param threshold a threshold of significance levels of differential correlation
-##' @return a text file
+##' @param save exports the results as a text if TRUE (default: FALSE)
+##' @return data.frame
 ##' @importFrom stats cor
 ##' @importFrom stats p.adjust
 ##' @importFrom utils write.table
@@ -163,7 +164,7 @@ get.lfdr <- function(r) {
 ##' @author Atsushi Fukushima
 ##' @export
 comp.2.cc.fdr <- function (output.file = "res.txt", data1, data2, method = "pearson",
-                           p.adjust.methods = "local", threshold = 0.05)
+                           p.adjust.methods = "local", threshold = 0.05, save = FALSE)
 {
   cc1 <- cor(t(data1), method = method)
   cc2 <- cor(t(data2), method = method)
@@ -205,15 +206,19 @@ comp.2.cc.fdr <- function (output.file = "res.txt", data1, data2, method = "pear
   ## threshold
   fin.ind <- pdiff.lfdr<threshold
   ## concat
-  res <- cbind(mol.names1[fin.ind], mol.names2[fin.ind], ccc1[fin.ind], p1[fin.ind],
+  res <- cbind(ccc1[fin.ind], p1[fin.ind],
                ccc2[fin.ind], p2[fin.ind],
                pdiff[fin.ind], diff[fin.ind], p1.lfdr[fin.ind], p2.lfdr[fin.ind], pdiff.lfdr[fin.ind])
+  res <- data.frame(mol.names1[fin.ind], mol.names2[fin.ind], res)
   head <- c("molecule X", "molecule Y", "r1", "p1",
             "r2", "p2", "p (difference)", "(r1-r2)",
             "lfdr (in cond. 1)", "lfdr (in cond. 2)",
             "lfdr (difference)")
-  res <- rbind(head, res)
-  write.table(res, file = output.file, row.names=FALSE, col.names=FALSE, sep="\t", quote=FALSE)
+  colnames(res) <- head
+  if (save) {
+      write.table(res, file = output.file, row.names=FALSE, col.names=FALSE, sep="\t", quote=FALSE)
+  }
+  res
 }
 
 

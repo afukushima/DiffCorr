@@ -2,8 +2,8 @@
 % Please edit documentation in R/DiffCorr-package.R
 \docType{package}
 \name{DiffCorr-package}
+\alias{DiffCorr}
 \alias{DiffCorr-package}
-\alias{_PACKAGE}
 \title{Differential correlations in omics datasets}
 \description{
 Analyze and visualize differential correlations in biological networks
