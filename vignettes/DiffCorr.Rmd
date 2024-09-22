@@ -1,0 +1,206 @@
+---
+title: 'DiffCorr: Analyzing and Visualizing Differential Correlation Networks in Transcriptomic and Metabolomic Data'
+author:
+- affiliation: Kyoto Prefectural University/RIKEN Center for Sustainable Resource Science
+  email: afukushima@gmail.com
+  name: Atsushi Fukushima
+date: "`r Sys.Date()`"
+output:
+  prettydoc::html_pretty:
+    toc: yes
+    theme: architect
+    highlight: github
+  pdf_document:
+    toc: yes
+  rmarkdown::html_vignette: default
+package: DiffCorr
+vignette: |
+    %\VignetteIndexEntry{DiffCorr}
+    %\VignetteEncoding{UTF-8}
+    %\VignetteEngine{knitr::rmarkdown}
+---
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Summary
+
+[DiffCorr](https://cran.r-project.org/web/packages/DiffCorr/index.html) [1, 5] is a package for identifying pattern changes between 2 experimental conditions in correlation networks (e.g., gene co-expression networks), which builds on a commonly used association measure, such as Pearson's correlation coefficient. This document demonstrates typical correlation network analysis using transcriptome and metabolome data.
+
+# Installation
+
+## Release version ([CRAN](https://cran.r-project.org/)):
+
+```{r installation from CRAN, eval = FALSE}
+install.packages("DiffCorr")
+```
+
+## Development version ([Github](https://github.com/afukushima/DiffCorr/)):
+
+```{r installation from GitHub, eval = FALSE}
+install.packages("devtools")
+install.packages(c("igraph", "fdrtool"))
+
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+BiocManager::install(c("pcaMethods", "multtest"))
+
+library(devtools)
+install_github("afukushima/DiffCorr")
+```
+
+
+# Introduction
+
+Molecular interactions can be modeled as networks by measuring associations between molecules in omics data. Gene co-expression analysis, commonly based on transcriptome datasets from microarray experiments and RNA-seq, uses metrics like Pearson’s correlation coefficient to quantify these relationships. 
+
+When gene correlations surpass a threshold, they form co-expression or correlation networks. These analyses, often using a "guide-gene" approach, offer insights into regulatory mechanisms and have been used to identify genes involved in plant secondary metabolisms.
+
+In addition to identifying differentially expressed genes (DEGs) between samples, changes in correlation patterns, or "differential correlations," provide insights into molecular interactions. Differential network analysis, which compares networks (e.g., normal vs. diseased), has been applied to both plant and animal studies and has been useful in metabolomics for understanding complex metabolic processes.
+
+This document demonstrate typical correlation network analysis using transcriptome and metabolome data. It also showcases the utility of the DiffCorr package by identifying biologically relevant, differentially correlated molecules in transcriptome co-expression and metabolite-to-metabolite correlation networks.
+
+```{r setup, message = FALSE}
+library(DiffCorr)
+```
+
+
+# DiffCorr for Golub's data
+
+This section was created from [Additional File 3](https://sourceforge.net/projects/diffcorr/files/AdditionalFile3.txt/download) included in the original DiffCorr package. As an example, we use Golub's data (http://coxpress.sourceforge.net/golub.txt). The dataset consist of gene expression profiles from 38 tumor samples including 2 different leukemia subtypes: 27 acute lymphoblastic leukemia (ALL) and 11 acute myeloid leukemia (AML) samples (Golub et al., 1999). The microarray platform used, Affymetrix GeneChip HuGeneFL (known as HU6800), contains 6800 probe-sets. To demonstrate the usefulness of DiffCorr package, we describe and discuss the results from analysis of the transcriptomic dataset.
+
+## Reading the Golub dataset
+
+```{r Golub dataset}
+golub.df <- read.table("http://coxpress.sourceforge.net/golub.txt", 
+                       sep = "\t", header = TRUE, row.names = 1)
+dim(golub.df)
+```
+
+## Clusters on each subset
+
+```{r clustering}
+hc.mol1 <- cluster.molecule(golub.df[, 1:27], "pearson", "average")  ## ALL (27 samples)
+hc.mol2 <- cluster.molecule(golub.df[, 28:38], "pearson", "average") ## AML (11 samples)
+```
+
+## Cut the tree at a correlation of 0.6 using cutree function
+
+```{r cutting tree}
+g1 <- cutree(hc.mol1, h = 0.4)
+g2 <- cutree(hc.mol2, h = 0.4)
+##
+res1 <- get.eigen.molecule(data = golub.df, groups = g1)
+res2 <- get.eigen.molecule(data = golub.df, groups = g2)
+```
+
+## Visualizing module networks
+```{r visualizing modules}
+gg1 <- get.eigen.molecule.graph(res1)
+plot(gg1, layout = layout.fruchterman.reingold(gg1))
+
+gg2 <- get.eigen.molecule.graph(res2)
+plot(gg2, layout = layout.fruchterman.reingold(gg2))
+```
+
+You can save the results.
+
+```{r writing, eval = FALSE}
+write.modules(g1, res1, outfile = "module1_list.txt")
+write.modules(g2, res2, outfile = "module2_list.txt")
+```
+
+
+You can examine the relationship between modules.
+
+```{r examination}
+for (i in 1:length(res1$eigen.molecules)) {
+  for (j in 1: length(res2$eigen.molecules)) {
+    r <- cor(res1$eigen.molecules[[i]],res2$eigen.molecules[[j]], method="spearman")
+    if (abs(r) > 0.8) {
+      print(paste("(i, j): ", i, " ", j, sep=""))
+      print(r)
+    }
+  }
+}
+
+cor(res1$eigen.molecules[[2]],res2$eigen.molecules[[8]], method="spearman")
+plot(res1$eigen.molecules[[2]], res2$eigen.molecules[[8]])
+plot(res1$eigen.molecules[[21]], res2$eigen.molecules[[24]])
+```
+
+
+## Examine groups of interest graphically
+
+look at groups 21 and 24 
+```{r examination of groups of interest graphically}
+plotDiffCorrGroup(golub.df, g1, g2, 21, 24, 1:27, 28:38,
+                    scale.center=TRUE, scale.scale=TRUE,
+                    ylim=c(-5,5))
+```
+
+
+## Export the results (FDR < 0.05)
+```{r export, eval = FALSE}
+comp.2.cc.fdr(output.file = "res.txt", golub.df[, 1:27], golub.df[, 28:38], threshold = 0.05)
+```
+
+
+# Exploring the metabolome data of flavonoid-deficient Arabidopsis
+
+Kusano et al. [2] studied flavonoid-deficient _Arabidopsis thaliana_ (Arabidopsis) mutants and wild-type plants using gas chromatography-mass spectrometry (GC-MS) for metabolite profiling [2-3]. The mutant, _transparent testa 4_ (_tt4_), lacks chalcone synthase (CHS), a key enzyme in the flavonoid biosynthesis pathway, and is unable to produce flavonoids, which protect plants from UV-B radiation. The dataset includes metabolite profiles of 37 aerial part samples, consisting of 17 Columbia-0 wild-type (Col-0) and 20 _tt4_ plants, covering a wide range of primary metabolites. The dataset `AraMetLeaves` is available in the DiffCorr package.
+
+
+```{r data}
+data(AraMetLeaves)
+dim(AraMetLeaves)
+```
+
+The `AraMetLeaves` dataset contains 59 metabolites (rows) and 50 observations (columns). For comparison with data from aerial parts [2-3], we selected 59 commonly detected metabolites across both datasets using MetMask (http://metmask.sourceforge.net). It is important to note that another genotype, _mto1_, is also present in the data matrix. For further information, refer to the help page of `AraMetLeaves`.
+
+```{r AraMetLeaves}
+colnames(AraMetLeaves)
+?AraMetLeaves
+```
+
+Differential correlation between _tt4_ and Col-0 can be performed as follows:
+
+```{r DiffCorr for AraMetLeaves, eval = FALSE}
+comp.2.cc.fdr(output.file = "Met_DiffCorr_res.txt", 
+              log10(AraMetLeaves[, 1:17]),   ## Col-0 (17 samples)
+              log10(AraMetLeaves[, 18:37]),  ## tt4 (20 samples)
+              method = "pearson",
+              threshold = 1.0)
+
+```
+
+As indicated in the ASCII result file "Met_DiffCorr_res.txt," the DiffCorr package identified significant differential correlations between sinapate and aromatic metabolites in _tt4_ and wild-type plants. Consistent with previous findings [2], aromatic metabolites in the shikimate pathway—specifically sinapate, phenylalanine, and tyrosine exhibited significant correlations in _tt4_ but not in wild-type plants (Table 1). This suggests a connection to the role of sinapoyl-malate in protecting the flavonoid-deficient tt4 mutant against UV-B irradiation [2]. Our results demonstrate that Arabidopsis compensates for the deficiency in either flavonoid or sinapoyl-malate production by over-accumulating alternative protective compounds [4]. These findings suggest that DiffCorr is applicable not only to transcriptomic data but also to other post-genomic data types, including metabolomic data.
+
+**Table 1.** A typical result of pairwise differential correlations from the DiffCorr package.
+
+|molecule X|molecule Y|r1|p1|r2|p2|p (difference)|(r1-r2)|lfdr (in cond. 1)|lfdr (in cond. 2)|lfdr (difference)|
+|----|----|----|----|----|----|----|----|----|----|----|
+|Malate|Threonine|0.77|0.00034|0.94|1.5E-09|0.057|-0.17|0.0049|3.2E-08|0.76|
+|Malate|Phenylalanine|0.45|0.070|0.89|1.2E-07|0.0086|-0.44|0.20|2.2E-06|0.64|
+* 
+
+# Conclusion
+
+The R package DiffCorr provides a straightforward and efficient framework for detecting differential correlations between two conditions in omics data, utilizing Fisher's z-test. It is a useful tool for inferring potential relationships and identifying biomarker candidates. Based on the concept of "differential network biology," DiffCorr [1, 5] is applicable not only to metabolomic data but also to transcriptome, proteome, and integrated omics datasets.
+
+# References
+
+1. Fukushima, Gene (2013) https://doi.org/10.1016/j.gene.2012.11.028
+
+2. Kusano et al. BMC Syst Biol (2007) https://doi.org/10.1186/1752-0509-1-53
+
+3. Fukushima et al. BMC Syst Biol (2011) https://doi.org/10.1186/1752-0509-5-1
+
+4. Kusano, Tohge, Fukushima et al. Plant J (2011) https://doi.org/10.1111/j.1365-313x.2011.04599.x
+
+5. Fukushima and Nishida “Using the DiffCorr Package to Analyze and Visualize Differential Correlations in Biological Networks” - Book chapter in “Challenges of Computational Network Analysis with R”. Editors: Matthias Dehmer, Yongtang Shi, and Frank Emmert-Streib. WILEY. http://as.wiley.com/WileyCDA/WileyTitle/productCd-3527339582.html
