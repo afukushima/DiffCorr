@@ -30,6 +30,10 @@ See also support page of the DiffCorr book [here](http://afukushima.github.io/di
 
 Updates
 ------------
+#### version 0.4.3 (Sep 22, 2024)
+* add vignette
+#### version 0.4.2 (Aug 23, 2023)
+* create DiffCorr-package.R
 #### version 0.4.1 (Sep 4, 2015)
 * A metabolite data set from Arabidopsis leaves and roots by GC-TOF/MS
 
