@@ -29,7 +29,7 @@ knitr::opts_chunk$set(
 ```
 
 
-[DiffCorr](https://cran.r-project.org/web/packages/DiffCorr/index.html) [1-2] is a package for identifying pattern changes between 2 experimental conditions in correlation networks (e.g., gene co-expression networks), which builds on a commonly used association measure, such as Pearson's correlation coefficient. This document demonstrates typical correlation network analysis using transcriptome and metabolome data.
+[DiffCorr](https://CRAN.R-project.org/package=DiffCorr) [1-2] is a package for identifying pattern changes between 2 experimental conditions in correlation networks (e.g., gene co-expression networks), which builds on a commonly used association measure, such as Pearson's correlation coefficient. This document demonstrates typical correlation network analysis using transcriptome and metabolome data.
 
 # Installation
 
@@ -71,12 +71,12 @@ library(DiffCorr)
 
 # DiffCorr for Golub's data (ALL/AML leukemia dataset)
 
-This section was created from [Additional File 3](https://sourceforge.net/projects/diffcorr/files/AdditionalFile3.txt/download) included in the original DiffCorr package. As an example, we use Golub's data (http://coxpress.sourceforge.net/golub.txt). The dataset consist of gene expression profiles from 38 tumor samples including 2 different leukemia subtypes: 27 acute lymphoblastic leukemia (ALL) and 11 acute myeloid leukemia (AML) samples (Golub et al., 1999). The microarray platform used, Affymetrix GeneChip HuGeneFL (known as HU6800), contains 6800 probe-sets. To demonstrate the usefulness of DiffCorr package, we describe and discuss the results from analysis of the transcriptomic dataset.
+This section was created from [Additional File 3](https://sourceforge.net/projects/diffcorr/files/AdditionalFile3.txt/download) included in the original DiffCorr package. As an example, we use Golub's data (https://coxpress.sourceforge.net/golub.txt). The dataset consist of gene expression profiles from 38 tumor samples including 2 different leukemia subtypes: 27 acute lymphoblastic leukemia (ALL) and 11 acute myeloid leukemia (AML) samples (Golub et al., 1999). The microarray platform used, Affymetrix GeneChip HuGeneFL (known as HU6800), contains 6800 probe-sets. To demonstrate the usefulness of DiffCorr package, we describe and discuss the results from analysis of the transcriptomic dataset.
 
 ## Reading the Golub dataset
 
 ```{r Golub dataset}
-golub.df <- read.table("http://coxpress.sourceforge.net/golub.txt", 
+golub.df <- read.table("https://coxpress.sourceforge.net/golub.txt", 
                        sep = "\t", header = TRUE, row.names = 1)
 dim(golub.df)
 ```
@@ -163,7 +163,7 @@ data(AraMetLeaves)
 dim(AraMetLeaves)
 ```
 
-The `AraMetLeaves` dataset contains 59 metabolites (rows) and 50 observations (columns). For comparison with data from aerial parts [5-6], we selected 59 commonly detected metabolites across both datasets using MetMask (http://metmask.sourceforge.net). It is important to note that another genotype, _mto1_, is also present in the data matrix. For further information, refer to the help page of `AraMetLeaves`.
+The `AraMetLeaves` dataset contains 59 metabolites (rows) and 50 observations (columns). For comparison with data from aerial parts [5-6], we selected 59 commonly detected metabolites across both datasets using MetMask (https://metmask.sourceforge.net). It is important to note that another genotype, _mto1_, is also present in the data matrix. For further information, refer to the help page of `AraMetLeaves`.
 
 ```{r AraMetLeaves}
 colnames(AraMetLeaves)
@@ -201,7 +201,7 @@ The R package DiffCorr provides a straightforward and efficient framework for de
 
 1. Fukushima, Gene (2013) https://doi.org/10.1016/j.gene.2012.11.028
 
-2. Fukushima and Nishida “Using the DiffCorr Package to Analyze and Visualize Differential Correlations in Biological Networks” - Book chapter in “Challenges of Computational Network Analysis with R”. Editors: Matthias Dehmer, Yongtang Shi, and Frank Emmert-Streib. WILEY. http://as.wiley.com/WileyCDA/WileyTitle/productCd-3527339582.html
+2. Fukushima and Nishida “Using the DiffCorr Package to Analyze and Visualize Differential Correlations in Biological Networks” - Book chapter in “Challenges of Computational Network Analysis with R”. Editors: Matthias Dehmer, Yongtang Shi, and Frank Emmert-Streib. WILEY. https://as.wiley.com/WileyCDA/WileyTitle/productCd-3527339582.html
 
 3. Saito et al. Trends Plant Sci (2008) https://doi.org/10.1016/j.tplants.2007.10.006
 

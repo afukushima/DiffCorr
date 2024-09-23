@@ -1,33 +1,45 @@
-Package: DiffCorr
 Type: Package
+Package: DiffCorr
 Title: Analyzing and Visualizing Differential Correlation Networks in
-        Biological Data
+    Biological Data
 Version: 0.4.4
 Date: 2024-09-22
-Authors@R: c(person("Atsushi", "Fukushima", role = c("aut", "cre"),
-                    email = "afukushima@gmail.com"),
-              person("Kozo", "Nishida", role = "aut",
-                    email = "kozo.nishida@gmail.com"))
+Authors@R: c(
+    person("Atsushi", "Fukushima", , "afukushima@gmail.com", role = c("aut", "cre")),
+    person("Kozo", "Nishida", , "kozo.nishida@gmail.com", role = "aut")
+  )
 Maintainer: Atsushi Fukushima <afukushima@gmail.com>
-Depends: pcaMethods, igraph, fdrtool, multtest
-Description: A method for identifying pattern changes between 2 experimental
-         conditions in correlation networks (e.g., gene co-expression networks),
-         which builds on a commonly used association measure, such as Pearson's
-         correlation coefficient. This package includes functions to calculate
-         correlation matrices for high-dimensional dataset and to test
-         differential correlation, which means the changes in the correlation
-         relationship among variables (e.g., genes and metabolites) between 2
-         experimental conditions. 
+Description: A method for identifying pattern changes between 2
+    experimental conditions in correlation networks (e.g., gene
+    co-expression networks), which builds on a commonly used association
+    measure, such as Pearson's correlation coefficient. This package
+    includes functions to calculate correlation matrices for
+    high-dimensional dataset and to test differential correlation, which
+    means the changes in the correlation relationship among variables
+    (e.g., genes and metabolites) between 2 experimental conditions.
 License: GPL (> 3)
-Packaged: 2022-04-29 06:24:09 UTC; kozo
-NeedsCompilation: no
-Repository: CRAN
-Date/Publication: 2015-04-02 00:07:09
-RoxygenNote: 7.3.2
+Depends: 
+    fdrtool,
+    igraph,
+    multtest,
+    pcaMethods
+Imports: 
+    graphics,
+    grDevices,
+    stats,
+    utils
 Suggests: 
     knitr,
-    rmarkdown,
     prettydoc,
+    rmarkdown,
     testthat (>= 3.0.0)
-VignetteBuilder: knitr
+VignetteBuilder: 
+    knitr
+Encoding: UTF-8
+Language: en-US
 Config/testthat/edition: 3
+Date/Publication: 2015-04-02 00:07:09
+NeedsCompilation: no
+Packaged: 2022-04-29 06:24:09 UTC; kozo
+Repository: CRAN
+RoxygenNote: 7.3.2

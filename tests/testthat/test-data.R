@@ -1,4 +1,5 @@
 test_that("AraMetLeaves dataset is loaded correctly", {
+  data("AraMetLeaves")
   expect_true(exists("AraMetLeaves"))
   expect_true(is.matrix(AraMetLeaves))
   expect_equal(nrow(AraMetLeaves), 59)  # 59 metabolites
@@ -9,6 +10,7 @@ test_that("AraMetLeaves dataset is loaded correctly", {
 })
 
 test_that("AraMetRoots dataset is loaded correctly", {
+  data("AraMetRoots")
   expect_true(exists("AraMetRoots"))
   expect_true(is.matrix(AraMetRoots))
   expect_equal(nrow(AraMetRoots), 59)  # 59 metabolites
