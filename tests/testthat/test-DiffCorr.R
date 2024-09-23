@@ -115,7 +115,7 @@ test_that("scalingMethods()", {
 test_that("uncent.cor2dist() ", {
     res <- uncent.cor2dist(as.matrix(t(iris[,1:4])), 1) 
     expect_identical(class(res), "numeric")
-    expect_equal(as.character(res[2]), "0.021986797478038", tolerance = 1E-5)
+    expect_equal(as.numeric(res[2]), 0.021986797478038, tolerance = 1E-5)
 })
 
 test_that("uncent.cordist()", {
