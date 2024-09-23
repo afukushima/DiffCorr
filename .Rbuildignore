@@ -2,3 +2,4 @@
 ^\.Rproj\.user$
 docs
 ^dev$
+^\.github$
