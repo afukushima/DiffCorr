@@ -1,22 +1,21 @@
-test_that("DiffCorr works", {
+test_that("comp.2.cc.fdr basic functionality", {
     data(AraMetLeaves)
-    
-    ############################
-    ## comp.2.cc.fdr()
-    ############################
     res <- comp.2.cc.fdr(output.file = "Met_DiffCorr_res.txt", 
                      log10(AraMetLeaves[, 1:17]),   ## Col-0 (17 samples)
                      log10(AraMetLeaves[, 18:37]),  ## tt4 (20 samples)
                      method = "pearson",
                      threshold = 1.0, save = FALSE)
+
+    expect_true(is.data.frame(res))
+    expect_true(all(c("molecule X", "molecule Y", "r1", "p1", "r2", "p2", "p (difference)", 
+                    "(r1-r2)", "lfdr (in cond. 1)", "lfdr (in cond. 2)", "lfdr (difference)") %in% colnames(res)))
+    
+    # relationship between malate and Thr
     res2 <- res[res$`molecule X` == "Malate" & res$`molecule Y` == "Threonine", ]
     expect_equal(res2$r1, 0.765864054338824)
+})
 
-            
-    ############################
-    ## cluster.molecule()
-    ############################
-    
+test_that("cluster.molecule()", {
     # Col-0 (17 samples)
     hc.mol1 <- cluster.molecule(AraMetLeaves[, 1:17], "pearson", "average")
     # tt4 mutant (20 samples)
@@ -39,45 +38,40 @@ test_that("DiffCorr works", {
     expect_equal(hc.mol1$height[8], 0.0639511219472022)    
     expect_equal(hc.mol2$height[1], 0.0214197534705823)
     expect_equal(hc.mol2$height[8], 0.0368260078562662)
+})
 
-    ############################
-    ## get.eigen.molecule()
-    ############################
+test_that("get.eigen.molecule()", {
     # with Golub data
     library(pcaMethods)
     data(golub, package = "multtest")
     hc.mol1 <- cluster.molecule(golub[1:100, 1:27], "pearson", "average")
     # cutting tree
-    g1 <- cutree(hc.mol1, h=0.6)
+    g1 <- cutree(hc.mol1, h = 0.6)
     res1 <- get.eigen.molecule(golub[1:100,], g1)
     ##
     expect_equal(as.integer(g1[85]), 33)
     expect_equal(res1$group, 13)
     expect_equal(res1$N, 18)
+})
 
-    ############################        
-    ## compcorr()
-    ############################
+test_that("DiffCorr works0", {
     res_compcorr <- compcorr(10, 0.1, 10, 0.9)
     expect_identical(class(res_compcorr), "list")
     expect_equal(res_compcorr$diff, -2.56656021657955)
+})
 
-    ############################        
-    ## cor.dist()
-    ############################
-    res_cor.dist <- cor.dist(as.matrix(t(iris[,1:4])))
+test_that("cor.dist()", {
+    res_cor.dist <- cor.dist(as.matrix(t(iris[, 1:4])))
     expect_identical(class(res_cor.dist), c("matrix", "array"))
     expect_equal(res_cor.dist[1, 2], 1.117569784133)
+})
 
-    ############################        
-    ## cor2.test()
-    ############################
+test_that("cor2.test()", {
     res_cor2.test <- cor2.test(30, 0.6)
     expect_equal(res_cor2.test, 0.000457055239405078)
-    
-    ############################        
-    ## generate_g()
-    ############################
+})
+
+test_that("generate_g()", {
     library(igraph)
     set.seed(1234)
     mat <- matrix(runif(100), nr=10)
@@ -85,10 +79,9 @@ test_that("DiffCorr works", {
     g <- generate_g(mat)
     expect_identical(class(g), "igraph")
     expect_identical(as.character(V(g)[.nei(2)]), "8")
-    
-    ############################        
-    ## get.eigen.molecule.graph()
-    ############################
+})
+
+test_that("get.eigen.molecule.graph()", {
     hc.mol1 <- cluster.molecule(golub[, 1:27], "pearson", "average")
     g1 <- cutree(hc.mol1, h=0.4)
     res1 <- get.eigen.molecule(golub, g1)
@@ -96,43 +89,36 @@ test_that("DiffCorr works", {
     expect_identical(class(g1.eigen), "igraph")
     expect_equal(length(V(g1.eigen)), 29)
     expect_equal(length(E(g1.eigen)), 31)
-    
-    
-    ############################        
-    ## get.lfdr()
-    ############################
+})
+
+test_that("get.lfdr()", {
     library("fdrtool")
     data(pvalues)
     dev.new()
     res <- get.lfdr(pvalues)
     expect_identical(class(res), "list")
     expect_equal(head(res$lfdr)[1], 0.649926998163217)
-    
-    ############################        
-    ## get.min.max()
-    ############################
+})
+
+test_that("get.min.max()", {
     res <- get.min.max(iris[,1:2])
     expect_equal(res$max, 7.9)
     expect_equal(res$min, 2)
-    
-    ############################        
-    ## scalingMethods()
-    ############################
+})
+
+test_that("scalingMethods()", {
     res <- scalingMethods(iris[,1:4], "level")
     expect_equal(dim(res), c(150, 4))
     expect_equal(res[150, 1], 0.493670886075949)
+})
 
-    ############################        
-    ## uncent.cor2dist() 
-    ############################        
+test_that("uncent.cor2dist() ", {
     res <- uncent.cor2dist(as.matrix(t(iris[,1:4])), 1) 
     expect_identical(class(res), "numeric")
     expect_equal(as.character(res[2]), "0.0219867974780388")
-    
-    
-    ############################        
-    ## uncent.cordist()
-    ############################        
+})
+
+test_that("uncent.cordist()", {
     res <- uncent.cordist(as.matrix(t(iris[,1:4]))) 
     expect_identical(class(res), c("matrix", "array"))
     expect_equal(res[1, 2], 0.0219867974780388)
