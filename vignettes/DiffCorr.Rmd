@@ -201,7 +201,7 @@ The R package DiffCorr provides a straightforward and efficient framework for de
 
 1. Fukushima, Gene (2013) https://doi.org/10.1016/j.gene.2012.11.028
 
-2. Fukushima and Nishida “Using the DiffCorr Package to Analyze and Visualize Differential Correlations in Biological Networks” - Book chapter in “Challenges of Computational Network Analysis with R”. Editors: Matthias Dehmer, Yongtang Shi, and Frank Emmert-Streib. WILEY. https://as.wiley.com/WileyCDA/WileyTitle/productCd-3527339582.html
+2. Fukushima and Nishida “Using the DiffCorr Package to Analyze and Visualize Differential Correlations in Biological Networks” - Book chapter in “Challenges of Computational Network Analysis with R”. Editors: Matthias Dehmer, Yongtang Shi, and Frank Emmert-Streib. WILEY.
 
 3. Saito et al. Trends Plant Sci (2008) https://doi.org/10.1016/j.tplants.2007.10.006
 
