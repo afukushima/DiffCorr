@@ -1,7 +1,7 @@
 ---
 title: 'DiffCorr: Analyzing and Visualizing Differential Correlation Networks in Transcriptomic and Metabolomic Data'
 author:
-- affiliation: Kyoto Prefectural University/RIKEN Center for Sustainable Resource Science
+- affiliation: Kyoto Prefectural University/RIKEN
   email: afukushima@gmail.com
   name: Atsushi Fukushima
 date: "`r Sys.Date()`"
