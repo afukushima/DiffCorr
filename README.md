@@ -30,6 +30,10 @@ See also support page of the DiffCorr book [here](http://afukushima.github.io/di
 
 Updates
 ------------
+#### version 0.4.5 (May 28, 2025)
+* update LICENSE in DESCRIPTION and my affilia
+tion
+
 #### version 0.4.4 (Sep 23, 2024)
 * add tests and argument 'save' of comp.2.cc.fdr(). 
 CHANGE: comp.2.cc.fdr() returns data frame.
