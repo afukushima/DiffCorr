@@ -76,8 +76,7 @@ This section was created from [Additional File 3](https://sourceforge.net/projec
 ## Reading the Golub dataset
 
 ```{r Golub dataset}
-golub.df <- read.table("https://coxpress.sourceforge.net/golub.txt", 
-                       sep = "\t", header = TRUE, row.names = 1)
+data(golub.df)
 dim(golub.df)
 ```
 

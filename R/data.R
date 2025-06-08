@@ -51,3 +51,23 @@ NULL
 ##' @author Atsushi Fukushima
 NULL
 
+
+##' Golub data set from CoXpress paper by Michael Watson. 
+##'
+##' This is a data.frame of AML/ALL leukaemia microarray 
+##' study, originally from Golub et al Science 286:531 (1999). 
+##' It comprises gene expression measurements from 38 tumor 
+##' mRNA samples, including 27 cases of acute lymphoblastic 
+##' leukemia (ALL) and 11 cases of acute myeloid leukemia 
+##' (AML). The HU6800 Affymetrix array, which contains 6,800 
+##' probe sets, was used. The dataset was filtered to remove 
+##' genes with negative values in any sample, resulting in a 
+##' final set of 2,568 genes.
+##' 
+##' @name golub.df
+##' @docType data
+##' @title A compiled expression data from Golub et al. (1999)
+##' @keywords datasets
+##' @references Michael Watson, BMC Bioinformatics 2006 7:509.
+NULL
+
