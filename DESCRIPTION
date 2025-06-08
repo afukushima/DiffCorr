@@ -3,7 +3,7 @@ Package: DiffCorr
 Title: Analyzing and Visualizing Differential Correlation Networks in
     Biological Data
 Version: 0.4.5
-Date: 2025-05-28
+Date: 2025-06-08
 Authors@R: c(
     person("Atsushi", "Fukushima", , "afukushima@gmail.com", role = c("aut", "cre")),
     person("Kozo", "Nishida", , "kozo.nishida@gmail.com", role = "aut")
