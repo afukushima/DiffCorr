@@ -2,6 +2,10 @@
 
 Updates
 ------------
+#### version 0.4.5 (June 8, 2025)
+* update LICENSE in DESCRIPTION and my affiliation
+* add golub.df
+
 #### version 0.4.4 (Sep 23, 2024)
 * add tests and argument 'save' of comp.2.cc.fdr(). 
 CHANGE: comp.2.cc.fdr() returns data frame.
